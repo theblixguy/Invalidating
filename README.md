@@ -88,7 +88,7 @@ extension UIView.Invalidating {
 Add the following to your project's `Package.swift` file:
 
 ```swift
-.package(url: "https://github.com/theblixguy/Invalidating", from: "0.0.1")
+.package(url: "https://github.com/theblixguy/Invalidating", from: "0.0.2")
 ```
 
 or add this package via the Xcode UI by going to File > Swift Packages > Add Package Dependency.
