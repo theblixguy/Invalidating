@@ -36,7 +36,7 @@ extension UIView.Invalidations {
 }
 ```
 
-You can then expose it to the property wrapper by extensing the `InvalidatingStaticMember` type:
+You can then expose it to the property wrapper by extending the `InvalidatingStaticMember` type:
 
 ```swift
 extension InvalidatingStaticMember where Base: InvalidatingViewProtocol {
