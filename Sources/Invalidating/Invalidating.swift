@@ -9,7 +9,7 @@ extension InvalidatingViewType {
     }
 
     private var _wrappedValue: Value
-    private let invalidationTuple: Invalidations.Tuple<AnyInvalidation, AnyInvalidation>
+    private let invalidationTuple: Invalidations.Tuple<AnyViewInvalidating, AnyViewInvalidating>
 
     public init(wrappedValue: Value, _ invalidation: InvalidationType.Member) {
       self._wrappedValue = wrappedValue

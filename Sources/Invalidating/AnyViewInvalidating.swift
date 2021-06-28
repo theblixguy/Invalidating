@@ -7,7 +7,7 @@
 
 import Foundation
 
-internal struct AnyInvalidation: InvalidatingViewProtocol {
+internal struct AnyViewInvalidating: InvalidatingViewProtocol {
   let base: InvalidatingViewProtocol
 
   init(base: InvalidatingViewProtocol) {
