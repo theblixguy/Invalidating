@@ -2,7 +2,7 @@
 
 A property wrapper that backports the new `@Invalidating` property wrapper to older versions. For more information on this new property wrapper, see the WWDC 2021 talk ["What's new in AppKit"](https://developer.apple.com/wwdc21/10054) for a brief introduction.
 
-When it's time to finally update your project to iOS 15/tvOS 15/macOS 12, you can remove this package without having to make any changes to your code! ✨
+When it's time to finally update your project to iOS 15/tvOS 15/macOS 12, you can remove this package without basically having to make any changes to your code! ✨
 
 ## Usage
 
@@ -64,7 +64,7 @@ extension UIViewInvalidating where Self == UIView.Invalidations.State {
 }
 ```
 
-for your code to compile afer removing this package. The `InvalidatingStaticMember` type only exists to workaround some language limitations which have been addressed in Swift 5.5, so you will need to make the tweak above for your existing code to compile.
+The `InvalidatingStaticMember` type only exists to workaround some language limitations which have been addressed in Swift 5.5, so you will need to make the tweak above for your existing code to compile.
 
 ## Extending `@Invalidating` to accept more values
 
