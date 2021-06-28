@@ -54,9 +54,9 @@ final class MyView: UIView {
 }
 ```
 
-### Note: 
+#### Note: 
 
-When you update to iOS 15/tvOS 15/macOS 12, you will need to update this extension to:
+When you update to iOS 15/tvOS 15/macOS 12, you will need to update the above extension to:
 
 ```swift
 extension UIViewInvalidating where Self == UIView.Invalidations.State {
@@ -64,7 +64,7 @@ extension UIViewInvalidating where Self == UIView.Invalidations.State {
 }
 ```
 
-for your code to compile afer removing this package.
+for your code to compile afer removing this package. The `InvalidatingStaticMember` type only exists to workaround some language limitations which have been addressed in Swift 5.5, so you will need to make the tweak above for your existing code to compile.
 
 ## Extending `@Invalidating` to accept more values
 
