@@ -7,16 +7,14 @@
 
 import Foundation
 
-internal struct AnyInvalidation<T>: InvalidatingViewProtocol {
-  let base: T
+internal struct AnyInvalidation: InvalidatingViewProtocol {
+  let base: InvalidatingViewProtocol
 
-  init(base: T) {
-    precondition(base is InvalidatingViewProtocol)
+  init(base: InvalidatingViewProtocol) {
     self.base = base
   }
 
   func invalidate(view: InvalidatingViewType) {
-    precondition(base is InvalidatingViewProtocol)
-    (base as! InvalidatingViewProtocol).invalidate(view: view)
+    base.invalidate(view: view)
   }
 }
