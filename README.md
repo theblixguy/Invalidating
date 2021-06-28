@@ -25,15 +25,15 @@ final class MyView: UIView {
 You can add custom invalidators by creating a type that conforms to `UIViewInvalidating` or `NSViewInvalidating` protocol (depending on the target platform) and implementing the `invalidate` method requirement:
 
 ```swift
-  extension UIView.Invalidations {
-    struct State: UIViewInvalidating {
-      static let state: Self = .init()
+extension UIView.Invalidations {
+  struct State: UIViewInvalidating {
+    static let state: Self = .init()
 
-      func invalidate(view: UIView) {
-        // Your custom logic to invalidate some state on the view
-      }
+    func invalidate(view: UIView) {
+      // Your custom logic to invalidate some state on the view
     }
   }
+}
 ```
 
 You can then expose it to the property wrapper by extensing the `InvalidatingStaticMember` type:
@@ -47,11 +47,11 @@ extension InvalidatingStaticMember where Base: InvalidatingViewProtocol {
 Then you can use it on `@Invalidating`:
 
 ```swift
-  final class MyView: UIView {
+final class MyView: UIView {
 
-    // Calls setNeedsLayout() and State.invalidate(self)
-    @Invalidating(.layout, .state) var customProperty: CGFloat = 1.0
-  }
+  // Calls setNeedsLayout() and State.invalidate(self)
+  @Invalidating(.layout, .state) var customProperty: CGFloat = 1.0
+}
 ```
 
 ## Extending `@Invalidating` to accept more values
