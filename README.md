@@ -39,7 +39,7 @@ extension UIView.Invalidations {
 You can then expose it to the property wrapper by extending the `InvalidatingStaticMember` type:
 
 ```swift
-extension InvalidatingStaticMember where Base: InvalidatingViewProtocol {
+extension InvalidatingStaticMember where Base: UIViewInvalidating {
   static var state: InvalidatingStaticMember<UIView.Invalidations.State> { .init(.state) }
 }
 ```
@@ -53,6 +53,18 @@ final class MyView: UIView {
   @Invalidating(.layout, .state) var customProperty: CGFloat = 1.0
 }
 ```
+
+### Note: 
+
+When you update to iOS 15/tvOS 15/macOS 12, you will need to update this extension to:
+
+```swift
+extension UIViewInvalidating where Self == UIView.Invalidations.State {
+  static var state: Self { .state }
+}
+```
+
+for your code to compile afer removing this package.
 
 ## Extending `@Invalidating` to accept more values
 
