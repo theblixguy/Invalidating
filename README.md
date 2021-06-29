@@ -2,7 +2,7 @@
 
 A property wrapper that backports the new `@Invalidating` property wrapper to older versions. For more information on this new property wrapper, see the WWDC 2021 talk ["What's new in AppKit"](https://developer.apple.com/wwdc21/10054) for a brief introduction.
 
-When it's time to finally update your project to iOS 15/tvOS 15/macOS 12, you can remove this package without basically having to make any changes to your code! ✨
+The syntax and types closely follows what Apple is doing, so when it's time to finally update your project to iOS 15+/tvOS 15+/macOS 12+, you can remove this package without basically having to make any changes to your code! ✨
 
 ## Usage
 
@@ -73,7 +73,7 @@ By default, you can provide up to 3 options (say `.layout, .display, .custom`) t
 ```swift
 extension UIView.Invalidating {
   convenience init<InvalidationType2: UIViewInvalidating, InvalidationType3: UIViewInvalidating, InvalidationType4: UIViewInvalidating>(wrappedValue: Value, _ invalidation1: InvalidationType.Member, _ invalidation2: InvalidationType2.Member, _ invalidation3: InvalidationType3.Member, _ invalidation4: InvalidationType4.Member) {
-    self.init(wrappedValue: wrappedValue, invalidation1, .init(Tuple(invalidation1: invalidation2.base, invalidation2: Tuple(invalidation1: invalidation3.base, invalidation2: invalidation4.base))))
+    self.init(wrappedValue: wrappedValue, invalidation1, invalidation2, .init(Tuple(invalidation1: invalidation3.base, invalidation2: invalidation4.base)))
   }
 }
 ```
