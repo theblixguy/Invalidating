@@ -9,7 +9,7 @@ import Foundation
 
 public struct InvalidatingStaticMember<Base> {
   public let base: Base
-  internal init(_ base: Base) {
+  public init(_ base: Base) {
     self.base = base
   }
 }
