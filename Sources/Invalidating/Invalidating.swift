@@ -1,6 +1,11 @@
-extension InvalidatingViewType {
+public extension InvalidatingViewType {
   @propertyWrapper
-  public class Invalidating<Value: Equatable, InvalidationType: InvalidatingViewProtocol> {
+  class Invalidating<Value: Equatable, InvalidationType: InvalidatingViewProtocol> {
+
+    private enum Storage {
+      case single(InvalidationType.Member)
+      case multiple(Invalidations.Tuple<AnyViewInvalidating, AnyViewInvalidating>)
+    }
 
     @available(*, unavailable)
     public var wrappedValue: Value {
@@ -9,16 +14,16 @@ extension InvalidatingViewType {
     }
 
     private var _wrappedValue: Value
-    private let invalidationTuple: Invalidations.Tuple<AnyViewInvalidating, AnyViewInvalidating>
+    private let storage: Storage
 
     public init(wrappedValue: Value, _ invalidation: InvalidationType.Member) {
       self._wrappedValue = wrappedValue
-      self.invalidationTuple = .init(invalidation1: .init(base: invalidation.base))
+      self.storage = .single(invalidation)
     }
 
-    public init<InvalidationType2: InvalidatingViewProtocol>(wrappedValue: Value, _ invalidation1: InvalidationType.Member, _ invalidation2: InvalidationType2.Member) {
+    public init<InvalidationType1: InvalidatingViewProtocol, InvalidationType2: InvalidatingViewProtocol>(wrappedValue: Value, _ invalidation1: InvalidationType1.Member, _ invalidation2: InvalidationType2.Member) where InvalidationType == Tuple<InvalidationType1, InvalidationType2> {
       self._wrappedValue = wrappedValue
-      self.invalidationTuple = .init(invalidation1: .init(base: invalidation1.base), invalidation2: .init(base: invalidation2.base))
+      self.storage = .multiple(.init(invalidation1: .init(base: invalidation1.base), invalidation2: .init(base: invalidation2.base)))
     }
 
     public static subscript<EnclosingSelf>(
@@ -34,17 +39,13 @@ extension InvalidatingViewType {
       set {
         guard observed[keyPath: storageKeyPath]._wrappedValue != newValue else { return }
         observed[keyPath: storageKeyPath]._wrappedValue = newValue
-        let invalidationTuple = observed[keyPath: storageKeyPath].invalidationTuple
-        invalidationTuple.invalidate(view: observed)
+        switch observed[keyPath: storageKeyPath].storage {
+          case let .single(value):
+            value.base.invalidate(view: observed)
+          case let .multiple(tuple):
+            tuple.invalidate(view: observed)
+        }
       }
     }
-  }
-}
-
-public extension InvalidatingViewType.Invalidating {
-  typealias Tuple = InvalidatingViewType.Invalidations.Tuple
-
-  convenience init<InvalidationType2: InvalidatingViewProtocol, InvalidationType3: InvalidatingViewProtocol>(wrappedValue: Value, _ invalidation1: InvalidationType.Member, _ invalidation2: InvalidationType2.Member, _ invalidation3: InvalidationType3.Member) {
-    self.init(wrappedValue: wrappedValue, invalidation1, .init(Tuple(invalidation1: invalidation2.base, invalidation2: invalidation3.base)))
   }
 }
