@@ -49,6 +49,45 @@ final class InvalidatingTests: XCTestCase {
     }
   }
 
+  @available(iOS 14, *)
+  final class UIKitTableViewCell: UITableViewCell {
+    @Invalidating(.configuration) var invalidatingConfiguration: Int = 0
+
+    private(set) var didCallNeedsUpdateConfiguration = false
+
+    override func setNeedsUpdateConfiguration() {
+      super.setNeedsUpdateConfiguration()
+
+      didCallNeedsUpdateConfiguration = true
+    }
+  }
+
+  @available(iOS 14, *)
+  final class UIKitCollectionViewCell: UICollectionViewCell {
+    @Invalidating(.configuration) var invalidatingConfiguration: Int = 0
+
+    private(set) var didCallNeedsUpdateConfiguration = false
+
+    override func setNeedsUpdateConfiguration() {
+      super.setNeedsUpdateConfiguration()
+
+      didCallNeedsUpdateConfiguration = true
+    }
+  }
+
+  @available(iOS 14, *)
+  final class UIKitTableViewHeaderFooterView: UITableViewHeaderFooterView {
+    @Invalidating(.configuration) var invalidatingConfiguration: Int = 0
+
+    private(set) var didCallNeedsUpdateConfiguration = false
+
+    override func setNeedsUpdateConfiguration() {
+      super.setNeedsUpdateConfiguration()
+
+      didCallNeedsUpdateConfiguration = true
+    }
+  }
+
   func testSingleInvalidation() {
     let view = UIKitTestView()
 
@@ -101,12 +140,35 @@ final class InvalidatingTests: XCTestCase {
     XCTAssertTrue(view.didCallInvalidateIntrinsicContentSize)
   }
 
+  func testConfigurationInvalidation() {
+    if #available(iOS 14, *) {
+      let tableViewCell = UIKitTableViewCell()
+      let collectionViewCell = UIKitCollectionViewCell()
+      let headerFooterView = UIKitTableViewHeaderFooterView()
+
+      XCTAssertFalse(tableViewCell.didCallNeedsUpdateConfiguration)
+      tableViewCell.invalidatingConfiguration = 1
+      XCTAssertTrue(tableViewCell.didCallNeedsUpdateConfiguration)
+
+      XCTAssertFalse(collectionViewCell.didCallNeedsUpdateConfiguration)
+      collectionViewCell.invalidatingConfiguration = 1
+      XCTAssertTrue(collectionViewCell.didCallNeedsUpdateConfiguration)
+
+      XCTAssertFalse(headerFooterView.didCallNeedsUpdateConfiguration)
+      headerFooterView.invalidatingConfiguration = 1
+      XCTAssertTrue(headerFooterView.didCallNeedsUpdateConfiguration)
+    } else {
+      XCTAssertTrue(true)
+    }
+  }
+
   #elseif os(macOS)
   final class AppKitTestView: NSView {
     @Invalidating(.layout) var invalidatingLayoutValue: Int = 0
     @Invalidating(.display) var invalidatingDisplayValue: Int = 0
     @Invalidating(.constraints) var invalidatingConstraintsValue: Int = 0
     @Invalidating(.intrinsicContentSize) var invalidatingIntrinsicContentSizeValue: Int = 0
+    @Invalidating(.restorableState) var invalidatingRestorableState: Int = 0
     @Invalidating(.layout, .constraints) var invalidatingLayoutAndConstraints: Int = 0
     @Invalidating(.layout, .constraints, .intrinsicContentSize) var invalidatingLayoutAndConstraintsAndIntrinsicContentSize: Int = 0
 
@@ -114,6 +176,7 @@ final class InvalidatingTests: XCTestCase {
     private(set) var didCallSetNeedsDisplay = false
     private(set) var didCallSetNeedsUpdateConstraints = false
     private(set) var didCallInvalidateIntrinsicContentSize = false
+    private(set) var didCallInvalidateRestorableState = false
 
     override var needsLayout: Bool {
       willSet {
@@ -143,11 +206,18 @@ final class InvalidatingTests: XCTestCase {
       didCallInvalidateIntrinsicContentSize = true
     }
 
+    override func invalidateRestorableState() {
+      super.invalidateRestorableState()
+
+      didCallInvalidateRestorableState = true
+    }
+
     func reset() {
       didCallSetNeedsLayout = false
       didCallSetNeedsDisplay = false
       didCallSetNeedsUpdateConstraints = false
       didCallInvalidateIntrinsicContentSize = false
+      didCallInvalidateRestorableState = false
     }
   }
 
@@ -175,6 +245,12 @@ final class InvalidatingTests: XCTestCase {
     XCTAssertFalse(view.didCallInvalidateIntrinsicContentSize)
     view.invalidatingIntrinsicContentSizeValue = 4
     XCTAssertTrue(view.didCallInvalidateIntrinsicContentSize)
+
+    view.reset()
+
+    XCTAssertFalse(view.didCallInvalidateRestorableState)
+    view.invalidatingRestorableState = 5
+    XCTAssertTrue(view.didCallInvalidateRestorableState)
   }
 
   func testTwoSequenceInvalidations() {
