@@ -6,7 +6,7 @@ The syntax and types closely follows what Apple is doing, so when it's time to f
 
 ## Usage
 
-Annotate your `Equatable` properties with `@Invalidating` and provide configuration options that will be used to trigger updates on the view whenever the property changes:
+Annotate your `Equatable` properties with `@Invalidating` and provide options that will be used to invalidate the view whenever the property's value changes:
 
 ```swift
 final class MyView: UIView {
@@ -19,6 +19,22 @@ final class MyView: UIView {
   // Calls setNeedsLayout() then setNeedsUpdateConstraints() then invalidateIntrinsicContentSize()
   @Invalidating(.layout, .constraints, .intrinsicContentSize) var magicProperty: CGFloat = 1234
 ```
+
+You can initialize the property wrapper with up to 10 options. You can of course add extensions to support more options though, but realistically speaking you'll likely never have a need to pass more than a few of them!
+
+By default, there is support for a total of 5 invalidation options per platform:
+
+#### Common
+- Layout
+- Display
+- Constraints
+- Intrinsic Size
+
+#### macOS only
+- Restorable State
+
+#### iOS 14+ only
+- Configuration
 
 ### Adding custom invalidators
 
@@ -66,22 +82,6 @@ extension UIViewInvalidating where Self == UIView.Invalidations.State {
 
 The `InvalidatingStaticMember` type only exists to workaround some language limitations which have been addressed in Swift 5.5, so you will need to make the tweak above for your existing code to compile.
 
-### Extending `@Invalidating` to accept more values
-
-By default, you can provide up to 3 options (say `.layout, .display, .custom`) to the property wrapper, however you can provide custom initializers so the property wrapper can be initialized with a larger set of customization options. This can be done by utilizing the built-in `Tuple` type. For example, here's how you can provide an intializer so `@Invalidating` can take up to 4 values:
-
-```swift
-extension UIView.Invalidating {
-  convenience init<InvalidationType2: UIViewInvalidating, InvalidationType3: UIViewInvalidating, InvalidationType4: UIViewInvalidating>(wrappedValue: Value, _ invalidation1: InvalidationType.Member, _ invalidation2: InvalidationType2.Member, _ invalidation3: InvalidationType3.Member, _ invalidation4: InvalidationType4.Member) {
-    self.init(wrappedValue: wrappedValue, invalidation1, invalidation2, .init(Tuple(invalidation1: invalidation3.base, invalidation2: invalidation4.base)))
-  }
-}
-```
-
-#### Note: 
-
-When you update to iOS 15+/tvOS 15+/macOS 12+, you can simply drop this extension because Apple's `@Invalidating` property wrapper accepts up to 10 options. I decided not to offer support for up to 10 because realistically speaking, you'll probably never hit that limit, and settled with a limit of 3 to keep the size of the package small and allowing you to manually add support for more options if needed.
-
 ## Requirements
 
 - iOS 13+, tvOS 13+ or macOS 10.15+
@@ -92,7 +92,7 @@ When you update to iOS 15+/tvOS 15+/macOS 12+, you can simply drop this extensio
 Add the following to your project's `Package.swift` file:
 
 ```swift
-.package(url: "https://github.com/theblixguy/Invalidating", from: "0.0.2")
+.package(url: "https://github.com/theblixguy/Invalidating", from: "0.0.3")
 ```
 
 or add this package via the Xcode UI by going to File > Swift Packages > Add Package Dependency.
