@@ -56,7 +56,7 @@ final class MyView: UIView {
 
 #### Note: 
 
-When you update to iOS 15/tvOS 15/macOS 12, you will need to update the above extension to:
+When you update to iOS 15+/tvOS 15+/macOS 12+, you will need to update the above extension to:
 
 ```swift
 extension UIViewInvalidating where Self == UIView.Invalidations.State {
@@ -66,7 +66,7 @@ extension UIViewInvalidating where Self == UIView.Invalidations.State {
 
 The `InvalidatingStaticMember` type only exists to workaround some language limitations which have been addressed in Swift 5.5, so you will need to make the tweak above for your existing code to compile.
 
-## Extending `@Invalidating` to accept more values
+### Extending `@Invalidating` to accept more values
 
 By default, you can provide up to 3 options (say `.layout, .display, .custom`) to the property wrapper, however you can provide custom initializers so the property wrapper can be initialized with a larger set of customization options. This can be done by utilizing the built-in `Tuple` type. For example, here's how you can provide an intializer so `@Invalidating` can take up to 4 values:
 
@@ -78,12 +78,16 @@ extension UIView.Invalidating {
 }
 ```
 
+#### Note: 
+
+When you update to iOS 15+/tvOS 15+/macOS 12+, you can simply drop this extension because Apple's `@Invalidating` property wrapper accepts up to 10 options. I decided not to offer support for up to 10 because realistically speaking, you'll probably never hit that limit, and settled with a limit of 3 to keep the size of the package small and allowing you to manually add support for more options if needed.
+
 ## Requirements
 
 - iOS 13+, tvOS 13+ or macOS 10.15+
 - Swift 5.3 or above
 
-## Note
+## Installation
 
 Add the following to your project's `Package.swift` file:
 
