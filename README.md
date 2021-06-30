@@ -42,11 +42,11 @@ You can add custom invalidators by creating a type that conforms to `UIViewInval
 
 ```swift
 extension UIView.Invalidations {
-  struct State: UIViewInvalidating {
-    static let state: Self = .init()
+  struct Focus: UIViewInvalidating {
+    static let focus: Self = .init()
 
     func invalidate(view: UIView) {
-      // Your custom logic to invalidate some state on the view
+      view.setNeedsFocusUpdate()
     }
   }
 }
@@ -56,7 +56,7 @@ You can then expose it to the property wrapper by extending the `InvalidatingSta
 
 ```swift
 extension InvalidatingStaticMember where Base: UIViewInvalidating {
-  static var state: InvalidatingStaticMember<UIView.Invalidations.State> { .init(.state) }
+  static var focus: InvalidatingStaticMember<UIView.Invalidations.Focus> { .init(.focus) }
 }
 ```
 
@@ -65,8 +65,8 @@ Then you can use it on `@Invalidating`:
 ```swift
 final class MyView: UIView {
 
-  // Calls setNeedsLayout() and State.invalidate(self)
-  @Invalidating(.layout, .state) var customProperty: CGFloat = 1.0
+  // Calls setNeedsLayout() and Focus.invalidate(self)
+  @Invalidating(.layout, .focus) var customProperty: CGFloat = 1.0
 }
 ```
 
@@ -75,8 +75,8 @@ final class MyView: UIView {
 When you update to iOS 15+/tvOS 15+/macOS 12+, you will need to update the above extension to:
 
 ```swift
-extension UIViewInvalidating where Self == UIView.Invalidations.State {
-  static var state: Self { .state }
+extension UIViewInvalidating where Self == UIView.Invalidations.Focus {
+  static var focus: Self { .focus }
 }
 ```
 
