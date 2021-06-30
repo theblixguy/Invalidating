@@ -85,7 +85,7 @@ The `InvalidatingStaticMember` type only exists to workaround some language limi
 ## Requirements
 
 - iOS 11+, tvOS 11+ or macOS 10.11+
-- Swift 5.3 or above
+- Swift 5.1 or above
 
 ## Installation
 
