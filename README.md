@@ -84,7 +84,7 @@ The `InvalidatingStaticMember` type only exists to workaround some language limi
 
 ## Requirements
 
-- iOS 13+, tvOS 13+ or macOS 10.15+
+- iOS 11+, tvOS 11+ or macOS 10.11+
 - Swift 5.3 or above
 
 ## Installation
@@ -92,7 +92,7 @@ The `InvalidatingStaticMember` type only exists to workaround some language limi
 Add the following to your project's `Package.swift` file:
 
 ```swift
-.package(url: "https://github.com/theblixguy/Invalidating", from: "0.0.3")
+.package(url: "https://github.com/theblixguy/Invalidating", from: "0.0.4")
 ```
 
 or add this package via the Xcode UI by going to File > Swift Packages > Add Package Dependency.

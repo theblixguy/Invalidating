@@ -6,9 +6,9 @@ import PackageDescription
 let package = Package(
   name: "Invalidating",
   platforms: [
-    .iOS(.v13),
-    .tvOS(.v13),
-    .macOS(.v10_15),
+    .iOS(.v11),
+    .tvOS(.v11),
+    .macOS(.v10_11),
   ],
   products: [
     .library(
