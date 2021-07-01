@@ -61,9 +61,9 @@ extension InvalidatingStaticMember where Base: UIViewInvalidating {
 ```
 
 > #### Note: 
-
+>
 > If you're using Xcode 13, you should do this instead:
-
+>
 > ```swift
 > extension UIViewInvalidating where Self == UIView.Invalidations.Focus {
 >  static var focus: Self { .focus }
