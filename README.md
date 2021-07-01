@@ -1,8 +1,8 @@
 # Invalidating
 
-A property wrapper that backports the new `@Invalidating` property wrapper to older versions. For more information on this new property wrapper, see the WWDC 2021 talk ["What's new in AppKit"](https://developer.apple.com/wwdc21/10054) for a brief introduction.
+A property wrapper that backports the new `@Invalidating` property wrapper to older versions of iOS/tvOS/macOS. For more information on this new property wrapper, see the WWDC 2021 talk ["What's new in AppKit"](https://developer.apple.com/wwdc21/10054) for a brief introduction.
 
-The syntax and types closely follows what Apple is doing, so when it's time to finally update your project to iOS 15+/tvOS 15+/macOS 12+, you can remove this package without basically having to make any changes to your code! ✨
+The syntax and types closely follows what Apple is doing, so when it's time to finally update your project's deployment target to iOS 15+/tvOS 15+/macOS 12+, you can remove this package without basically having to make any changes to your code! ✨
 
 ## Usage
 
@@ -60,7 +60,19 @@ extension InvalidatingStaticMember where Base: UIViewInvalidating {
 }
 ```
 
-Then you can use it on `@Invalidating`:
+> #### Note: 
+
+> If you're using Xcode 13, you should do this instead:
+
+> ```swift
+> extension UIViewInvalidating where Self == UIView.Invalidations.Focus {
+>  static var focus: Self { .focus }
+> }
+> ```
+
+> The `InvalidatingStaticMember` type only exists to workaround some language limitations which have been addressed in Swift 5.5, which ships with Xcode 13. So if you're on the latest Xcode, you do not need to use the workaround.
+
+Then you can use your new invalidator on `@Invalidating`:
 
 ```swift
 final class MyView: UIView {
@@ -70,22 +82,10 @@ final class MyView: UIView {
 }
 ```
 
-#### Note: 
-
-When you update to iOS 15+/tvOS 15+/macOS 12+, you will need to update the above extension to:
-
-```swift
-extension UIViewInvalidating where Self == UIView.Invalidations.Focus {
-  static var focus: Self { .focus }
-}
-```
-
-The `InvalidatingStaticMember` type only exists to workaround some language limitations which have been addressed in Swift 5.5, so you will need to make the tweak above for your existing code to compile.
-
 ## Requirements
 
-- iOS 11+, tvOS 11+ or macOS 10.11+
-- Swift 5.1 or above
+- Deployment target of iOS 11+, tvOS 11+ or macOS 10.11+
+- Xcode 11 or above
 
 ## Installation
 
