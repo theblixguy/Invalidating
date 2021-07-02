@@ -7,7 +7,11 @@
 
 import Foundation
 
-public extension InvalidatingViewType.Invalidations {
+public extension Invalidations {
+  
+  @available(iOS, introduced: 11, obsoleted: 15)
+  @available(tvOS, introduced: 11, obsoleted: 15)
+  @available(macOS, introduced: 10.11, obsoleted: 12)
   struct Tuple<Invalidation1: InvalidatingViewProtocol, Invalidation2: InvalidatingViewProtocol>: InvalidatingViewProtocol {
     private let tuple: (Invalidation1, Invalidation2)
 

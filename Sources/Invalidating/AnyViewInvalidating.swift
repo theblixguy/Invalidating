@@ -7,6 +7,7 @@
 
 import Foundation
 
+#if compiler(<5.5)
 internal struct AnyViewInvalidating: InvalidatingViewProtocol {
   let base: InvalidatingViewProtocol
 
@@ -18,3 +19,4 @@ internal struct AnyViewInvalidating: InvalidatingViewProtocol {
     base.invalidate(view: view)
   }
 }
+#endif

@@ -7,9 +7,11 @@
 
 import Foundation
 
+#if compiler(<5.5)
 public struct InvalidatingStaticMember<Base> {
   public let base: Base
   public init(_ base: Base) {
     self.base = base
   }
 }
+#endif
