@@ -10,81 +10,82 @@ import Foundation
 import UIKit
 #endif
 
-public extension InvalidatingViewType {
-  enum Invalidations {
-    public struct Layout: InvalidatingViewProtocol {
-      public static let layout: Self = .init()
+@available(iOS, introduced: 11, obsoleted: 15, renamed: "UIView.Invalidations")
+@available(tvOS, introduced: 11, obsoleted: 15, renamed: "UIView.Invalidations")
+@available(macOS, introduced: 10.11, obsoleted: 12, renamed: "NSView.Invalidations")
+public enum Invalidations {
+  public struct Layout: InvalidatingViewProtocol {
+    public static let layout: Self = .init()
 
-      public func invalidate(view: InvalidatingViewType) {
-        #if os(iOS) || os(tvOS)
-        view.setNeedsLayout()
-        #elseif os(macOS)
-        view.needsLayout = true
-        #endif
-      }
+    public func invalidate(view: InvalidatingViewType) {
+#if os(iOS) || os(tvOS)
+      view.setNeedsLayout()
+#elseif os(macOS)
+      view.needsLayout = true
+#endif
     }
+  }
 
-    public struct Display: InvalidatingViewProtocol {
-      public static let display: Self = .init()
+  public struct Display: InvalidatingViewProtocol {
+    public static let display: Self = .init()
 
-      public func invalidate(view: InvalidatingViewType) {
-        #if os(iOS) || os(tvOS)
-        view.setNeedsDisplay()
-        #elseif os(macOS)
-        view.setNeedsDisplay(view.bounds)
-        #endif
-      }
+    public func invalidate(view: InvalidatingViewType) {
+#if os(iOS) || os(tvOS)
+      view.setNeedsDisplay()
+#elseif os(macOS)
+      view.setNeedsDisplay(view.bounds)
+#endif
     }
+  }
 
-    public struct Constraints: InvalidatingViewProtocol {
-      public static let constraints: Self = .init()
+  public struct Constraints: InvalidatingViewProtocol {
+    public static let constraints: Self = .init()
 
-      public func invalidate(view: InvalidatingViewType) {
-        #if os(iOS) || os(tvOS)
-        view.setNeedsUpdateConstraints()
-        #elseif os(macOS)
-        view.needsUpdateConstraints = true
-        #endif
-      }
+    public func invalidate(view: InvalidatingViewType) {
+#if os(iOS) || os(tvOS)
+      view.setNeedsUpdateConstraints()
+#elseif os(macOS)
+      view.needsUpdateConstraints = true
+#endif
     }
+  }
 
-    public struct IntrinsicContentSize: InvalidatingViewProtocol {
-      public static let intrinsicContentSize: Self = .init()
+  public struct IntrinsicContentSize: InvalidatingViewProtocol {
+    public static let intrinsicContentSize: Self = .init()
 
-      public func invalidate(view: InvalidatingViewType) {
-        view.invalidateIntrinsicContentSize()
-      }
+    public func invalidate(view: InvalidatingViewType) {
+      view.invalidateIntrinsicContentSize()
     }
+  }
 
-    #if os(macOS)
-    public struct RestorableState: InvalidatingViewProtocol {
-      public static let restorableState: Self = .init()
+#if os(macOS)
+  public struct RestorableState: InvalidatingViewProtocol {
+    public static let restorableState: Self = .init()
 
-      public func invalidate(view: InvalidatingViewType) {
-        view.invalidateRestorableState()
-      }
+    public func invalidate(view: InvalidatingViewType) {
+      view.invalidateRestorableState()
     }
-    #endif
+  }
+#endif
 
-    #if os(iOS) || os(tvOS)
-    public struct Configuration: InvalidatingViewProtocol {
-      public static let configuration: Self = .init()
+#if os(iOS) || os(tvOS)
+  public struct Configuration: InvalidatingViewProtocol {
+    public static let configuration: Self = .init()
 
-      public func invalidate(view: InvalidatingViewType) {
-        if #available(iOS 14, *) {
-          switch view {
-            case let view as UITableViewCell:
-              view.setNeedsUpdateConfiguration()
-            case let view as UICollectionViewCell:
-              view.setNeedsUpdateConfiguration()
-            case let view as UITableViewHeaderFooterView:
-              view.setNeedsUpdateConfiguration()
-            default:
-              fatalError("View '\(String(describing: view))' does not support configuration updates!")
-          }
+    public func invalidate(view: InvalidatingViewType) {
+      if #available(iOS 14, *) {
+        switch view {
+          case let view as UITableViewCell:
+            view.setNeedsUpdateConfiguration()
+          case let view as UICollectionViewCell:
+            view.setNeedsUpdateConfiguration()
+          case let view as UITableViewHeaderFooterView:
+            view.setNeedsUpdateConfiguration()
+          default:
+            assertionFailure("View '\(String(describing: view))' does not support configuration updates!")
         }
       }
     }
-    #endif
   }
+#endif
 }

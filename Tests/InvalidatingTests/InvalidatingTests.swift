@@ -1,16 +1,15 @@
 import XCTest
 @testable import Invalidating
 
-final class InvalidatingTests: XCTestCase {
-
+final class InvalidatingBackportTests: XCTestCase {
   #if os(iOS) || os(tvOS)
   final class UIKitTestView: UIView {
-    @Invalidating(.layout) var invalidatingLayoutValue: Int = 0
-    @Invalidating(.display) var invalidatingDisplayValue: Int = 0
-    @Invalidating(.constraints) var invalidatingConstraintsValue: Int = 0
-    @Invalidating(.intrinsicContentSize) var invalidatingIntrinsicContentSizeValue: Int = 0
-    @Invalidating(.layout, .constraints) var invalidatingLayoutAndConstraints: Int = 0
-    @Invalidating(.layout, .constraints, .intrinsicContentSize) var invalidatingLayoutAndConstraintsAndIntrinsicContentSize: Int = 0
+    @ViewInvalidating(.layout) var invalidatingLayoutValue: Int = 0
+    @ViewInvalidating(.display) var invalidatingDisplayValue: Int = 0
+    @ViewInvalidating(.constraints) var invalidatingConstraintsValue: Int = 0
+    @ViewInvalidating(.intrinsicContentSize) var invalidatingIntrinsicContentSizeValue: Int = 0
+    @ViewInvalidating(.layout, .constraints) var invalidatingLayoutAndConstraints: Int = 0
+    @ViewInvalidating(.layout, .constraints, .intrinsicContentSize) var invalidatingLayoutAndConstraintsAndIntrinsicContentSize: Int = 0
 
     private(set) var didCallSetNeedsLayout = false
     private(set) var didCallSetNeedsDisplay = false
@@ -51,7 +50,7 @@ final class InvalidatingTests: XCTestCase {
 
   @available(iOS 14, *)
   final class UIKitTableViewCell: UITableViewCell {
-    @Invalidating(.configuration) var invalidatingConfiguration: Int = 0
+    @ViewInvalidating(.configuration) var invalidatingConfiguration: Int = 0
 
     private(set) var didCallNeedsUpdateConfiguration = false
 
@@ -64,7 +63,7 @@ final class InvalidatingTests: XCTestCase {
 
   @available(iOS 14, *)
   final class UIKitCollectionViewCell: UICollectionViewCell {
-    @Invalidating(.configuration) var invalidatingConfiguration: Int = 0
+    @ViewInvalidating(.configuration) var invalidatingConfiguration: Int = 0
 
     private(set) var didCallNeedsUpdateConfiguration = false
 
@@ -77,7 +76,7 @@ final class InvalidatingTests: XCTestCase {
 
   @available(iOS 14, *)
   final class UIKitTableViewHeaderFooterView: UITableViewHeaderFooterView {
-    @Invalidating(.configuration) var invalidatingConfiguration: Int = 0
+    @ViewInvalidating(.configuration) var invalidatingConfiguration: Int = 0
 
     private(set) var didCallNeedsUpdateConfiguration = false
 
@@ -164,13 +163,13 @@ final class InvalidatingTests: XCTestCase {
 
   #elseif os(macOS)
   final class AppKitTestView: NSView {
-    @Invalidating(.layout) var invalidatingLayoutValue: Int = 0
-    @Invalidating(.display) var invalidatingDisplayValue: Int = 0
-    @Invalidating(.constraints) var invalidatingConstraintsValue: Int = 0
-    @Invalidating(.intrinsicContentSize) var invalidatingIntrinsicContentSizeValue: Int = 0
-    @Invalidating(.restorableState) var invalidatingRestorableState: Int = 0
-    @Invalidating(.layout, .constraints) var invalidatingLayoutAndConstraints: Int = 0
-    @Invalidating(.layout, .constraints, .intrinsicContentSize) var invalidatingLayoutAndConstraintsAndIntrinsicContentSize: Int = 0
+    @ViewInvalidating(.layout) var invalidatingLayoutValue: Int = 0
+    @ViewInvalidating(.display) var invalidatingDisplayValue: Int = 0
+    @ViewInvalidating(.constraints) var invalidatingConstraintsValue: Int = 0
+    @ViewInvalidating(.intrinsicContentSize) var invalidatingIntrinsicContentSizeValue: Int = 0
+    @ViewInvalidating(.restorableState) var invalidatingRestorableState: Int = 0
+    @ViewInvalidating(.layout, .constraints) var invalidatingLayoutAndConstraints: Int = 0
+    @ViewInvalidating(.layout, .constraints, .intrinsicContentSize) var invalidatingLayoutAndConstraintsAndIntrinsicContentSize: Int = 0
 
     private(set) var didCallSetNeedsLayout = false
     private(set) var didCallSetNeedsDisplay = false
